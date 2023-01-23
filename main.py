@@ -1,35 +1,29 @@
-from tdigest import TDigest
-import numpy as np
-from numpy.random import random
+import pandas as pd
 from matplotlib import pyplot as plt
+import openpyxl
+from tdigest import TDigest
+import json
 
+# open Dat sets for T-Digest
+df = openpyxl.load_workbook('Dat sets for T-Digest (1).xlsx')
+data = df.active
+
+# Chose the column to read
+print(f"Choose the column to read,\n1 for \"{data.cell(row=5,column = 2).value}\",\n2 for \"{data.cell(row=5,column = 3).value}\",\n3 for \"{data.cell(row=5,column = 4).value}\",\n4 for \"{data.cell(row=5,column = 5).value}\",\n5 for \"{data.cell(row=5,column = 6).value}\",\nand 6 for \"{data.cell(row=5,column = 7).value}\"")
+response = int(input())
+if response > 6 or response < 1:
+    print("Invalid input")
+    exit(1)
+col = 1 + response
 
 digest = TDigest()
-plt.title("TDigest")
+# array = []
+for i in range(14, 14+data.cell(row=1, column=col).value):
+    # array.append(data.cell(column=col, row=i).value)
+    digest.update(data.cell(column=col, row=i).value)
+digest.compress()
 
-array = []
+with open("output.json", "w+") as outfile:
+    json.dump(digest.to_dict(), outfile, indent=4)
 
-for x in range(5000):
-    x = random()
-    y = (x) ** 2
-    array.append((x, y))
-    digest.update(x, y)
-# another_digest = TDigest()
-# another_digest.batch_update(random(5000))
-# print(another_digest.percentile(15))
-# print(digest.percentile(15))
-# sum_digest = digest + another_digest
-# print(sum_digest.percentile(15))
-centroids = []
-
-for data in digest.to_dict()["centroids"]:
-    centroids.append((data["m"], data["c"]))
-
-# plt.hist(array, 50, facecolor='#265691')
-# plt.axis([0, 1, 0, 1000])
-# plt.show()
-
-plt.scatter(*zip(*array), color='#265691')
-plt.scatter(*zip(*centroids), color='#880808')
-plt.axis([0, 1, 0, 1])
-plt.show()
+print("Done, centroids are saved in output.json")
