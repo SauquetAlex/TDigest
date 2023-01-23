@@ -1,4 +1,3 @@
-import pandas as pd
 from matplotlib import pyplot as plt
 import openpyxl
 from tdigest import TDigest
@@ -9,7 +8,7 @@ df = openpyxl.load_workbook('Dat sets for T-Digest (1).xlsx')
 data = df.active
 
 # Chose the column to read
-print(f"Choose the column to read,\n1 for \"{data.cell(row=5,column = 2).value}\",\n2 for \"{data.cell(row=5,column = 3).value}\",\n3 for \"{data.cell(row=5,column = 4).value}\",\n4 for \"{data.cell(row=5,column = 5).value}\",\n5 for \"{data.cell(row=5,column = 6).value}\",\nand 6 for \"{data.cell(row=5,column = 7).value}\"")
+print(f"Choose the column to read,\n1 for \"{data.cell(row=5,column = 2).value}\",\n2 for \"{data.cell(row=5,column = 3).value}\",\n3 for \"{data.cell(row=5,column = 4).value}\",\n4 for \"{data.cell(row=5,column = 5).value}\",\n5 for \"{data.cell(row=5,column = 6).value}\",\n 6 for \"{data.cell(row=5,column = 7).value}\"")
 response = int(input())
 if response > 6 or response < 1:
     print("Invalid input")
